@@ -1,7 +1,12 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 class Category(models.Model):
+    def get_absolute_url(self):
+        return reverse('shop:product_list_by_category',
+                       args=[self.slug])
+
     name = models.CharField(max_length=200,
                             db_index=True)
     slug = models.SlugField(max_length=200,
@@ -16,6 +21,9 @@ class Category(models.Model):
         return self.name
 
 class Product(models.Model):
+    def get_absolute_url(self):
+        return reverse('shop:product_detail',
+                       args=[self.id, self.slug]) 
     category = models.ForeignKey(Category,
                                  related_name='products',
                                  on_delete=models.CASCADE) 
